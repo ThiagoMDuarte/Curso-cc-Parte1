@@ -1,0 +1,11 @@
+vezes = int(input('Digite a quantidade de ímpares: '))
+a = 0
+total = vezes + 1
+if total == 1:
+    print(1)
+else:
+    while total != 1:
+        impar = 1 + a
+        print(impar)
+        a = a + 2
+        total = total - 1

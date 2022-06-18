@@ -1,0 +1,7 @@
+num = int(input('Digite um número inteiro: '))
+soma = 0
+while num != 0:
+    primeiro = num % 10
+    soma = soma + primeiro
+    num = num // 10
+print(soma)

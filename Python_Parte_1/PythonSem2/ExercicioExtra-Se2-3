@@ -1,0 +1,7 @@
+numero = int(input('Digite um número inteiro:'))
+if numero >= 10:
+    dezena = numero // 10
+    centena = dezena % 10
+    print('O dígito das dezenas é',centena)
+else: 
+    print('O dígito das dezenas é 0' )

@@ -1,0 +1,4 @@
+Lados = int(input('Digite o valor correspondente ao lado de um quadrado:'))
+perimetro = Lados*4
+area = Lados*Lados
+print('perímetro:', perimetro, '- área:' , area)

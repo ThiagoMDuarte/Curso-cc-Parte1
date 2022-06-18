@@ -1,0 +1,8 @@
+seg_total = int(input('Por favor, entre com o número de segundos que deseja converter: '))
+min_total = seg_total // 60
+seg_res = seg_total % 60
+hora_total = min_total // 60
+min_res = min_total % 60
+dia_res = hora_total // 24
+hora_res = hora_total % 24
+print(dia_res, 'dias,', hora_res, 'horas,', min_res, 'minutos e', seg_res, 'segundos.')
