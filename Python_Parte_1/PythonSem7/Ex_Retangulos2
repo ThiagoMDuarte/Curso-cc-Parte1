@@ -1,0 +1,17 @@
+l = int(input('Digite a largura: '))
+a = int(input('Digite a altura: '))
+linha = 1
+coluna = 1
+while linha <= a:
+    
+    while coluna <= l:
+        if linha == 1 or linha == a or coluna == 1 or coluna == l:
+                print('#', end= '')
+                
+        else:
+                print(' ', end= '')
+        coluna = coluna + 1
+
+    linha = linha + 1
+    coluna = 1
+    print()
