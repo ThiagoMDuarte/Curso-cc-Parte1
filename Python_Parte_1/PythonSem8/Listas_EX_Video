@@ -1,0 +1,12 @@
+numeros = []
+n = int(input('Digite um número: '))
+numeros.append (n)
+while n != 0:
+    n = int(input('Digite um número: '))
+    numeros.append (n)
+    if n == 0:
+        x = len(numeros)
+        while x != 0:
+            print(numeros[(x-1)],end= ' ')
+            x = x - 1
+

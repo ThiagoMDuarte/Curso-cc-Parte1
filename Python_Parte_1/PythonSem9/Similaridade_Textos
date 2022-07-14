@@ -1,0 +1,179 @@
+import re
+
+def le_assinatura():
+    '''A funcao le os valores dos tracos linguisticos do modelo e devolve uma assinatura a ser comparada com os textos fornecidos'''
+    print("Bem-vindo ao detector automático de COH-PIAH.")
+    print("Informe a assinatura típica de um aluno infectado:")
+
+    wal = float(input("Entre o tamanho médio de palavra:"))
+    ttr = float(input("Entre a relação Type-Token:"))
+    hlr = float(input("Entre a Razão Hapax Legomana:"))
+    sal = float(input("Entre o tamanho médio de sentença:"))
+    sac = float(input("Entre a complexidade média da sentença:"))
+    pal = float(input("Entre o tamanho medio de frase:"))
+
+    return [wal, ttr, hlr, sal, sac, pal]
+
+def le_textos():
+    '''A funcao le todos os textos a serem comparados e devolve uma lista contendo cada texto como um elemento'''
+    i = 1
+    textos = []
+    texto = input("Digite o texto " + str(i) +" (aperte enter para sair):")
+    while texto:
+        textos.append(texto)
+        i += 1
+        texto = input("Digite o texto " + str(i) +" (aperte enter para sair):")
+
+    return textos
+
+def separa_sentencas(texto):
+    '''A funcao recebe um texto e devolve uma lista das sentencas dentro do texto'''
+    sentencas = re.split(r'[.!?]+', texto)
+    if sentencas[-1] == '':
+        del sentencas[-1]
+    return sentencas
+
+def separa_frases(sentenca):
+    '''A funcao recebe uma sentenca e devolve uma lista das frases dentro da sentenca'''
+    return re.split(r'[,:;]+', sentenca)
+
+def separa_palavras(frase):
+    '''A funcao recebe uma frase e devolve uma lista das palavras dentro da frase'''
+    return frase.split()
+
+def n_palavras_unicas(lista_palavras):
+    '''Essa funcao recebe uma lista de palavras e devolve o numero de palavras que aparecem uma unica vez'''
+    freq = dict()
+    unicas = 0
+    for palavra in lista_palavras:
+        p = palavra.lower()
+        if p in freq:
+            if freq[p] == 1:
+                unicas -= 1
+            freq[p] += 1
+        else:
+            freq[p] = 1
+            unicas += 1
+
+    return unicas
+
+def n_palavras_diferentes(lista_palavras):
+    '''Essa funcao recebe uma lista de palavras e devolve o numero de palavras diferentes utilizadas'''
+    freq = dict()
+    for palavra in lista_palavras:
+        p = palavra.lower()
+        if p in freq:
+            freq[p] += 1
+        else:
+            freq[p] = 1
+
+    return len(freq)
+
+def texto_para_frases(texto): # Transforma o texto em frases em uma lista / Feito por mim
+    todas_as_frases = []
+    sentencas_do_texto = separa_sentencas(texto) 
+
+    for x in sentencas_do_texto:
+        frases = separa_frases(x)
+        todas_as_frases = todas_as_frases + frases
+    return todas_as_frases
+    
+def texto_para_palavras(texto): # Transforma todo o texto em palavras em uma lista / Feito por mim
+    todas_as_frases = []
+    todas_as_palavras = []
+    sentencas_do_texto = separa_sentencas(texto) 
+
+    for x in sentencas_do_texto:
+        frases = separa_frases(x)
+        todas_as_frases = todas_as_frases + frases
+        
+    for i in todas_as_frases:
+        palavras = separa_palavras(i)
+        todas_as_palavras = todas_as_palavras + palavras
+    return todas_as_palavras
+    
+def num_caracteres_sentenca(sentenca_sem_espacos): # Feito por mim
+    caracteres_totais = 0
+    for palavra in sentenca_sem_espacos:
+        caracteres_totais = caracteres_totais + len(palavra)
+    return caracteres_totais
+
+
+def compara_assinatura(as_a, as_b):
+    '''IMPLEMENTAR. Essa funcao recebe duas assinaturas de texto e deve devolver o grau de similaridade nas assinaturas.'''
+    x = 0
+    simila_total = 0
+    while x != 6:
+        simila_parte = as_a[x] - as_b[x]
+        x = x + 1
+        simila_total = abs(simila_parte) + simila_total
+    simila_total = simila_total / 6
+
+    return simila_total
+
+def calcula_assinatura(texto): # Totalmente certo
+    '''IMPLEMENTAR. Essa funcao recebe um texto e deve devolver a assinatura do texto. Colocar os 6 valores.'''
+
+    # Tamanho Médio das Palavras 
+    tamanho_das_palavras = 0
+    for i in texto_para_palavras(texto):
+        tamanho_das_palavras = tamanho_das_palavras + len(i)
+    tamanho_medio_das_palavras = tamanho_das_palavras / len(texto_para_palavras(texto))
+
+    # Type-Token 
+    lista_palavras = texto_para_palavras(texto)
+    palavras_diferentes = n_palavras_diferentes(lista_palavras)
+    type_token = palavras_diferentes / len(texto_para_palavras(texto))
+
+    # Razão Hapax Legomana 
+    palavras_unicas = n_palavras_unicas(lista_palavras)
+    hapax_legomana = palavras_unicas / len(texto_para_palavras(texto))
+
+    # Tamanho Médio da Sentença 
+    sentencas_do_texto = separa_sentencas(texto)
+    caracteres_das_sentencas = 0
+    for z in sentencas_do_texto:
+        caracteres_das_sentencas = caracteres_das_sentencas + len(z)
+    num_sentencas = len(separa_sentencas(texto))
+    tamanho_medio_da_sentenca = caracteres_das_sentencas / num_sentencas
+
+    # Complexidade da Sentença 
+    numero_total_de_frases = len(texto_para_frases(texto)) 
+    complexidade_sentenca = numero_total_de_frases / len(separa_sentencas(texto))
+
+    #Tamanho médio de frase 
+    num_frases_do_texto = len(texto_para_frases(texto))
+    todas_as_frases = texto_para_frases(texto)
+    num_caracteres_das_frases = 0
+    for x in todas_as_frases:
+        num_caracteres_das_frases = num_caracteres_das_frases + len(x)
+    tamanho_medio_de_frase = num_caracteres_das_frases / num_frases_do_texto
+
+    return [tamanho_medio_das_palavras, type_token, hapax_legomana, tamanho_medio_da_sentenca, complexidade_sentenca, tamanho_medio_de_frase]
+
+def avalia_textos(textos, ass_cp):
+    '''IMPLEMENTAR. Essa funcao recebe uma lista de textos e uma assinatura ass_cp e deve devolver o numero (1 a n) do texto com maior probabilidade de ter sido infectado por COH-PIAH.'''
+    # Calcular a assinatura dos textos da função le_textos dps compara com a assinatura da função le_assinatura
+
+    lista_ass = []
+    for texto in textos:
+        sab_texto = calcula_assinatura(texto)
+        lista_ass.append(sab_texto)
+    x = 0
+    teste = []
+    while x != len(lista_ass):
+        comparacao = compara_assinatura(ass_cp,lista_ass[x])
+        x = x + 1
+        teste = [[comparacao,x]] + teste
+        teste.sort()
+        teste2 = teste[0]
+    return teste2[1]
+
+def main():
+    ass_cp = le_assinatura()
+    textos = le_textos()
+    resultado = avalia_textos(textos,ass_cp)
+    x = resultado
+    print('O autor do texto', x, 'está infectado com COH-PIAH')
+    
+main()

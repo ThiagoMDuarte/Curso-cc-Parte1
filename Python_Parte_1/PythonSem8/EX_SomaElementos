@@ -1,0 +1,3 @@
+def soma_elementos (lista):
+    total = sum(lista)
+    return total
